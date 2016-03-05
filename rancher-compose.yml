@@ -1,0 +1,15 @@
+jenkins_data:
+  image: slipke/jenkins
+  volumes:
+    - /var/jenkins_home/
+  entrypoint: /bin/true
+  labels:
+    io.rancher.container.start_once: true
+jenkins:
+  image: slipke/jenkins
+  volumes_from:
+    - jenkins_data
+  ports:
+    - 8090:8080
+  labels:
+    io.rancher.sidekicks: jenkins_data

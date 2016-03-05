@@ -1,0 +1,16 @@
+git
+git-client
+scm-api
+checkstyle
+cloverphp
+crap4j
+dry
+htmlpublisher
+workflow-step-api
+jdepend
+plot
+pmd
+analysis-core
+violations
+warnings
+xunit
