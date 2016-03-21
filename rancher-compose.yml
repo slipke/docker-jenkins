@@ -9,6 +9,8 @@ jenkins:
   image: slipke/jenkins
   volumes_from:
     - jenkins_data
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
   ports:
     - 8090:8080
   labels:

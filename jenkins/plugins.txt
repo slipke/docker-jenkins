@@ -14,3 +14,9 @@ analysis-core
 violations
 warnings
 xunit
+authentication-tokens
+icon-shim
+credentials
+docker-commons
+token-macro
+docker-build-publish
