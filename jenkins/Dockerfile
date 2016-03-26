@@ -14,9 +14,12 @@ RUN apt-get update \
 # Set docker user & group
 RUN usermod -g docker jenkins
 
-# Install ant
+# Install additional packages
 RUN apt-get update \
-    && apt-get install -y ant php5
+    && apt-get install -y ant php5 npm nodejs-legacy
+
+# Install bower
+RUN npm install -g bower
 
 # Install composer
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php \
