@@ -1,22 +1,23 @@
-FROM jenkins
+FROM jenkins:2.60.1
 
 USER root
 
 # Install docker
 RUN apt-get update \
-    && apt-get install -y apt-transport-https ca-certificates \
-    && apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D \
-    && echo "deb https://apt.dockerproject.org/repo debian-jessie main" > /etc/apt/sources.list.d/docker.list \
+    && apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common ant php7.0 \
+    && curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
+    && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
     && apt-get update \
-    && apt-cache policy docker-engine \
-    && apt-get install -y docker-engine
+    && apt-get install -y docker-ce \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set docker user & group
 RUN usermod -g docker jenkins
 
-# Install additional packages
-RUN apt-get update \
-    && apt-get install -y ant php5 npm nodejs-legacy
+# Install node
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+	&& apt-get install -y nodejs \
+	&& rm -rf /var/lib/apt/lists/*
 
 # Install bower
 RUN npm install -g bower
@@ -28,7 +29,7 @@ RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php
 
 USER jenkins
 
-COPY jenkins/php-template/config.xml /usr/share/jenkins/ref/jobs/php-template/
-COPY jenkins/plugins.txt /usr/share/jenkins/ref/
+COPY php-template/config.xml /usr/share/jenkins/ref/jobs/php-template/
+COPY plugins.txt /usr/share/jenkins/ref/
 
-RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
