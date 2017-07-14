@@ -1,5 +1,7 @@
 FROM jenkins:2.60.1
 
+ENV COMPOSE_VERSION 1.14.0
+
 USER root
 
 # Install docker
@@ -26,6 +28,9 @@ RUN npm install -g bower
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
+
+# Install docker-compose
+RUN curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose
 
 USER jenkins
 
